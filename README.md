@@ -3,7 +3,7 @@
 - Define a standard for building CLAP plugins that:
   - targets WASM + WASI architecture
   - can run within a web browser
-  - can run within WASM interpreter / JIT engine, like wasmer
+  - can run within a WASM JIT engine, like wasmer
 - Define a standard way to distribute web CLAP plugins
 
 ## Why?
@@ -12,8 +12,10 @@ A WCLAP (meaning WEB-CLAP) can:
 - run on any OS and CPU archicture
   - build once, run everywhere
   - long term compatibility
+  - good performance as the code can be optimized for the native CPU and use SIMD
 - use web technologies for the GUI
-- standard and unified way to distribute and install
+- better user experience for installing and discovering plugins:
+  - standard and unified way to distribute and install
   - Official plugin registry, with the possibility for the user to add
     unofficial plugin registries
 
@@ -28,9 +30,7 @@ There are a set of constraints when targeting WCLAP:
 
 The plugin will be a bundle.
 
-https://raw.githubusercontent.com/free-audio/web-clap/refs/heads/main/README.md
-
-We'll have a root plugin registry: `https://raw.githubusercontent.com/free-audio/web-clap-registry/refs/heads/main/registry.json`.
+We'll have an official root plugin registry, hosted by the CLAP project.
 
 We'll provide a standard and opensource adapter for bridging wasm plugin to existing native hosts.
 
@@ -69,7 +69,7 @@ The bridge will likely be implemented in rust, because cargo will make everythin
 The GUI is optional, so 3 scenarios are planned:
 - headless
 - web gui
-  - we can ship a web browser engine like tauri does
+  - we can ship a web browser engine like tauri does, and spawn a window for the plugin with a webview, then connect the plugin to the webview
 - native gui
   - once wasi provides wgpu, mouse and keyboard using input and windowing system support
 
@@ -93,7 +93,9 @@ Bundle should be available for download as an archive using `.tar.gz` file forma
 
 ## The registry
 
-A WCLAP registry is defined by a json file:
+A WCLAP registry is a set of links to repositories.
+
+It is defined by a json file:
 ```json5
 {
         "name": "CLAP Official Registry",
@@ -106,10 +108,9 @@ A WCLAP registry is defined by a json file:
 }
 ```
 
-There will be one official CLAP registry available at the following URL:
-`https://raw.githubusercontent.com/free-audio/web-clap-registry/refs/heads/main/registry.json`
+There will be one official CLAP registry available at a static URL.
 
-The registry will be a static file, which can be updated using a pull request or similar.
+The registry will be a static file, which can be updated using a pull request or similar. We may do something similar to flathub.
 
 ### The repository
 
@@ -138,3 +139,11 @@ A WCLAP repository is define by a json file:
         ]
 }
 ```
+
+A repository can be served as a static file and it is the task of
+the plugin manufacturer to maintain this file.
+
+The https protocol will provide trust that repository is provided by
+the plugin manufacturer as it should be hosted on the plugin's website.
+
+TODO: we may consider providing a helper that can automatically build the repository json file.
