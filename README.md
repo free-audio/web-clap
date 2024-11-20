@@ -75,11 +75,11 @@ The GUI is optional, so 3 scenarios are planned:
 
 ## The Bundle file format
 
-The bundle is a directory that contains a mandatory `plugin.wasm` file,
+The bundle is a directory that contains a mandatory `module.wasm` file,
 and an arbitrary set of files. For example:
 ```
 my-plugin.wclap/
-|`- plugin.wasm
+|`- module.wasm
 |`- factory-wavetables/...
 |`- factory-presets/...
 |`- gui/
