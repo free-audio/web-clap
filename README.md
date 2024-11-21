@@ -91,6 +91,8 @@ my-plugin.wclap/
 
 Bundle should be available for download as an archive using `.tar.gz` file format.
 
+Hosts running in the web browser might use [Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) to transparently fetch and unpack this bundle and return its contents using fictitious URLs (e.g. `my-plugin.wclap.tar.gz/module.wasm`).
+
 ## The registry
 
 A WCLAP registry is a set of links to repositories.
