@@ -1,0 +1,11 @@
+[package]
+name = "web-clap-bridge"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wasmer = { version = "5.0.1", features = ["cranelift", "sys", "wat"] }
+wasmer-wasix = "0.31.0"
+wasmer-cache = "5.0.1"
+anyhow = "1.0.93"
+clap = { version = "4.5.21", features = ["derive"] }
