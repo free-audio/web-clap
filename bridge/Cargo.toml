@@ -9,3 +9,6 @@ wasmer-wasix = "0.31.0"
 wasmer-cache = "5.0.1"
 anyhow = "1.0.93"
 clap = { version = "4.5.21", features = ["derive"] }
+clap-sys = "0.4.0"
+log = "0.4.22"
+env_logger = "0.11.5"
