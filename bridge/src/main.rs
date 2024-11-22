@@ -4,6 +4,7 @@ use anyhow::bail;
 use clap::{Arg, Parser};
 use log::info;
 use wasmer::{imports, Instance, Module, Store, Value};
+use wasmer_wasix::{Pipe, WasiEnv};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -13,15 +14,14 @@ struct CommandLineArguments {
     plugin: String,
 }
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let cmd_args = CommandLineArguments::parse();
 
     let mut store = Store::default();
     let module = Module::from_file(&store, PathBuf::from(&cmd_args.plugin))?;
 
-    // The module doesn't import anything, so we create an empty import object.
-    let import_object = imports! {};
-    let instance = Instance::new(&mut store, &module, &import_object)?;
+    let (instance, env) = WasiEnv::builder("test clap host").instantiate(module, &mut store)?;
 
     let entry = instance.exports.get_global("clap_entry")?;
 
