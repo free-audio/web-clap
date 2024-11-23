@@ -23,15 +23,24 @@ async fn main() -> anyhow::Result<()> {
 
     let (instance, env) = WasiEnv::builder("test clap host").instantiate(module, &mut store)?;
 
-    let entry = instance.exports.get_global("clap_entry")?;
+    for (symbol, ext) in &instance.exports {
+        println!("Global Symbol: {}, {:?}", symbol, ext);
+    }
 
+    let entry = instance.exports.get_global("clap_entry")?;
     let clap_entry_value = entry.get(&mut store);
-    let Some(Some(entry_value)) = clap_entry_value.externref() else {
-        bail!("couldn't get clap_entry value");
+    println!("Found value of type: {:?}", clap_entry_value);
+
+    let Some(v1) = clap_entry_value.externref() else {
+        bail!("couldn't get clap_entry value 1");
+    };
+
+    let Some(entry_value) = v1 else {
+        bail!("couldn't get clap_entry value 2");
     };
 
     let Some(entry) = entry_value.downcast::<clap_sys::entry::clap_plugin_entry>(&store) else {
-        bail!("couldn't get clap_entry value");
+        bail!("couldn't get clap_entry value 3");
     };
 
     unsafe {
