@@ -64,6 +64,12 @@ The bridge will:
 
 The bridge will likely be implemented in rust, because cargo will make everything easier.
 
+### JSON registry/repository format
+
+The bridge will fetch an initial list of repositories, and the user will be able to add their own registries/repositories to that list, by providing the URL of JSON resources.  The specific JSON format will be developed as part of the open-source bridge plugin.
+
+While this JSON format may be adopted by other WCLAP hosts (for easy browsing/installation of WCLAP plugins), it is not an explicit part of the WCLAP standard, as it's a package-manager/distribution issue.
+
 ## GUI
 
 The GUI is optional, so 3 scenarios are planned:
@@ -89,63 +95,8 @@ my-plugin.wclap/
  `- ...
 ```
 
-Bundle should be available for download as an archive using `.tar.gz` file format.
+### Fetching from the web
+
+When serving WCLAP bundles over the web, their URL should resolve to an archive using `.tar.gz` file format.  This allows straightforward discovery and pre-loading of all resources.
 
 Hosts running in the web browser might use [Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) to transparently fetch and unpack this bundle and return its contents using fictitious URLs (e.g. `my-plugin.wclap.tar.gz/module.wasm`).
-
-## The registry
-
-A WCLAP registry is a set of links to repositories.
-
-It is defined by a json file:
-```json5
-{
-        "name": "CLAP Official Registry",
-        "repositories": [
-                "https://u-he.com/clap-repository.json",
-                "https://fabfilter.com/clap-repository.json",
-                "https://surge-synthesizer.github.io/clap-repository.json",
-                // etc...
-        ]
-}
-```
-
-There will be one official CLAP registry available at a static URL.
-
-The registry will be a static file, which can be updated using a pull request or similar. We may do something similar to flathub.
-
-### The repository
-
-A WCLAP repository is define by a json file:
-```json5
-{
-        "name": "Official u-he repository",
-        "plugins": [
-                {
-                        "ids": [
-                                // all plugin ids within the shell plugin
-                                "com.u-he.Zebra2",
-                                "com.u-he.Zebrify",
-                                "com.u-he.Zebralette",
-                        ],
-                        "version": "X.Y.Z",
-                        "download-url": "https://u-he.com/wclap/Zebra2-X.Y.Z.wclap.tar.gz"
-                },
-                {
-                        "ids": [
-                                "com.u-he.Diva"
-                        ],
-                        "version": "X.Y.Z",
-                        "download-url": "https://u-he.com/wclap/Diva-X.Y.Z.wclap.tar.gz"
-                }
-        ]
-}
-```
-
-A repository can be served as a static file and it is the task of
-the plugin manufacturer to maintain this file.
-
-The https protocol will provide trust that repository is provided by
-the plugin manufacturer as it should be hosted on the plugin's website.
-
-TODO: we may consider providing a helper that can automatically build the repository json file.
