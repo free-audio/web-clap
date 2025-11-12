@@ -36,7 +36,7 @@ We'll provide a standard and opensource adapter for bridging wasm plugin to exis
 
 ## The bridge
 
-It is unrealistic to expect every hosts to add support to wasm and undesirable because:
+It is unrealistic to expect every host to add support to wasm and undesirable because:
 - it is very hard to add the required dependencies to the build system
 - we want a consistent experience across all hosts
 - we want a universal solution
